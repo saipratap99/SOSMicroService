@@ -32,9 +32,17 @@
     <None Remove="Pomelo.EntityFrameworkCore.MySql" />
     <None Remove="Microsoft.EntityFrameworkCore.SqlServer" />
     <None Remove="Constants\" />
+    <None Remove="Exceptions\" />
+    <None Remove="Repositories\" />
+    <None Remove="Services\" />
+    <None Remove="Utils\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Constants\" />
+    <Folder Include="Exceptions\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Services\" />
+    <Folder Include="Utils\" />
   </ItemGroup>
 </Project>

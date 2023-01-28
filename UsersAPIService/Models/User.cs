@@ -10,9 +10,8 @@ namespace UsersAPIService.Models
 	{
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Required]
         [Range(1, Int32.MaxValue)]
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         [Required]
         [MaxLength(60)]
@@ -20,18 +19,19 @@ namespace UsersAPIService.Models
         public string Name { get; set; } = null!;
 
         [EmailAddress]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Required]
         [Phone]
         public string Phone { get; set; } = null!;
 
+        [Required]
         public string Password { get; set; }
 
         [MaxLength(10)]
-        public string Role { get; set; } = Roles.REPORTER;
+        public string? Role { get; set; } = Roles.REPORTER;
 
-		public string Address { get; set; }
+		public string? Address { get; set; }
 
         [Required]
         public string City { get; set; }

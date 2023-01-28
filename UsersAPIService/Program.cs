@@ -2,6 +2,8 @@
 using Azure.Identity;
 using Microsoft.EntityFrameworkCore;
 using UsersAPIService.Models;
+using UsersAPIService.Repositories;
+using UsersAPIService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +33,9 @@ builder.Services.AddDbContext<SOSDbContext>(options =>
     var serverVersion = new MySqlServerVersion(new Version(8, 0, 28));
     options.UseMySql(builder.Configuration.GetConnectionString("SOSdb"), serverVersion, options => options.EnableRetryOnFailure());
 });
+
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
