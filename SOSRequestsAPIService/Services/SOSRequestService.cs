@@ -10,7 +10,6 @@ namespace SOSRequestsAPIService.Services
 {
 	public class SOSRequestService: ISOSRequestService
 	{
-
         private readonly ISOSRequestRepository _sOSRequestRepository;
         private readonly ILogger<SOSRequestService> _logger;
 

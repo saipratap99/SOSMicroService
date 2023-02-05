@@ -2,35 +2,32 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+using FIRAPIService.Exceptions;
+using FIRAPIService.Models;
+using FIRAPIService.Services;
 using Microsoft.AspNetCore.Mvc;
-using UsersAPIService.Exceptions;
-using UsersAPIService.Models;
-using UsersAPIService.Services;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace UsersAPIService.Controllers
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace FIRAPIService.Controllers
 {
     [Route("api/[controller]")]
-    public class UserController : Controller
+    public class FIRController : Controller
     {
+        private readonly IFIRService _fIRService;
 
-        private readonly IUserService _userService;
-
-        public UserController(IUserService userService)
+        public FIRController(IFIRService fIRService)
         {
-            this._userService = userService;
+            this._fIRService = fIRService;
         }
 
-        // GET: api/values
-    
         [HttpGet]
         public async Task<ActionResult<object>> Get()
         {
             try
             {
-                var response = await this._userService.GetUsers();
+                var response = await this._fIRService.Get();
                 return Ok(response);
             }
             catch (Exception e)
@@ -44,14 +41,12 @@ namespace UsersAPIService.Controllers
 
         }
 
-        // GET api/values/5
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<object>> Get(int id)
         {
             try
             {
-                var response = await this._userService.GetUser(id);
+                var response = await this._fIRService.Get(id);
                 return Ok(response);
             }
             catch (Exception e)
@@ -64,14 +59,12 @@ namespace UsersAPIService.Controllers
             }
         }
 
-        // POST api/values
         [HttpPost]
-        public async Task<ActionResult<object>> Post([FromBody] User user)
+        public async Task<ActionResult<object>> Post([FromBody] FIR fir)
         {
             try
             {
-                Console.WriteLine(user.City);
-                var response = await this._userService.CreateUser(user);
+                var response = await this._fIRService.Create(fir);
                 return Ok(response);
             }
             catch (Exception e)
@@ -83,7 +76,6 @@ namespace UsersAPIService.Controllers
                     return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
-
     }
 }
 
