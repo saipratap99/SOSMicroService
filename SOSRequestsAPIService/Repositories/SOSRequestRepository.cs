@@ -1,11 +1,10 @@
 ﻿using System;
 using Microsoft.VisualBasic;
 using SOSRequestsAPIService.Models;
-using UsersAPIService.Models;
-using UsersAPIService.Repositories;
-using UsersAPIService.Constants;
+using SOSRequestsAPIService.Repositories;
+using SOSRequestsAPIService.Constants;
 using Microsoft.EntityFrameworkCore;
-using UsersAPIService.Exceptions;
+using SOSRequestsAPIService.Exceptions;
 
 namespace SOSRequestsAPIService.Repositories
 {
@@ -48,7 +47,7 @@ namespace SOSRequestsAPIService.Repositories
             try
             {
                 this._logger.LogInformation($"Enter: Repositories.SOSRequestRepository.Get.");
-                List<SOSRequest> sOSRequests = await this._context.SOSRequests.Include(u => u.Priority).ToListAsync<SOSRequest>();
+                List<SOSRequest> sOSRequests = await this._context.SOSRequests.Include(u => u.Priority).Include(u => u.Status).Include(u => u.User).Include(u => u.Police).ToListAsync<SOSRequest>();
                 this._logger.LogInformation($"Exit: Repositories.SOSRequestRepository.Get, SOS Requests {sOSRequests}");
                 return sOSRequests;
             }
@@ -65,7 +64,7 @@ namespace SOSRequestsAPIService.Repositories
             try
             {
                 this._logger.LogInformation($"Enter: Repositories.SOSRequestRepository.Get, Id: {id}");
-                var sOSRequest = await this._context.SOSRequests.FirstOrDefaultAsync(sos => sos.Id == id);
+                var sOSRequest = await this._context.SOSRequests.Include(u => u.Priority).Include(u => u.Status).Include(u => u.User).Include(u => u.Police).FirstOrDefaultAsync(sos => sos.Id == id);
                 if (sOSRequest == null)
                     throw new BusinessException($"{ResponseConstants.SOSRequest_NOT_FOUND} id: {id}");
                 this._logger.LogInformation($"Exit: Repositories.SOSRequestRepository.Get");
@@ -83,6 +82,12 @@ namespace SOSRequestsAPIService.Repositories
         {
             throw new NotImplementedException();
         }
+
+        //private object getSOSRequestsIncludingForiegnKeyData()
+        //{
+        //    var obj = this._context.SOSRequests.Include(u => u.Priority).Include(u => u.Status).Include(u => u.User).Include(u => u.Police);
+        //    return obj;
+        //}
     }
 }
 

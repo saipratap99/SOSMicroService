@@ -2,8 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using UsersAPIService.Constants;
-using UsersAPIService.Models;
 
 namespace SOSRequestsAPIService.Models
 {
@@ -33,24 +31,20 @@ namespace SOSRequestsAPIService.Models
         [Required]
         [ForeignKey("UserId")]
         public int UserId { get; set; }
-        [JsonIgnore]
         public User User { get; set; } = null!;
 
         [ForeignKey("PoliceId")]
         public int? PoliceId { get; set; }
-        [JsonIgnore]
         public User? Police { get; set; }
 
         [Required]
         [ForeignKey("PriorityId")]
         public int PriorityId { get; set; }
-        [JsonIgnore]
         public Priority Priority { get; set; } = null!;
 
         [Required]
         [ForeignKey("StatusId")]
         public int StatusId { get; set; }
-        [JsonIgnore]
         public Status Status { get; set; } = null!;
 
         

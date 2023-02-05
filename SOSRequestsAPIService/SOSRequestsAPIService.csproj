@@ -31,6 +31,8 @@
     <None Remove="Repositories\" />
     <None Remove="Services\" />
     <None Remove="Utils\" />
+    <None Remove="Constants\" />
+    <None Remove="Exceptions\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
@@ -38,10 +40,7 @@
     <Folder Include="Repositories\" />
     <Folder Include="Services\" />
     <Folder Include="Utils\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\UsersAPIService\UsersAPIService.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
+    <Folder Include="Constants\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
 </Project>

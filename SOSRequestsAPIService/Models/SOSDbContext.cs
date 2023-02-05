@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using UsersAPIService.Models;
+using SOSRequestsAPIService.Models;
 
 namespace SOSRequestsAPIService.Models
 {

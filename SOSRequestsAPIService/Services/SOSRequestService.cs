@@ -2,11 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using SOSRequestsAPIService.Models;
 using SOSRequestsAPIService.Repositories;
-using UsersAPIService.Exceptions;
-using UsersAPIService.Models;
-using UsersAPIService.Repositories;
-using UsersAPIService.Services;
-using UsersAPIService.Utils;
+using SOSRequestsAPIService.Exceptions;
+using SOSRequestsAPIService.Services;
+using SOSRequestsAPIService.Utils;
 
 namespace SOSRequestsAPIService.Services
 {
