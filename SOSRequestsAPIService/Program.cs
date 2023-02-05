@@ -1,17 +1,16 @@
 ﻿using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Microsoft.EntityFrameworkCore;
-using UsersAPIService.Models;
-using UsersAPIService.Repositories;
-using UsersAPIService.Services;
+using SOSRequestsAPIService.Models;
+using SOSRequestsAPIService.Repositories;
+using SOSRequestsAPIService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
 /** KeyValut Confug
-
+ 
 var defaultCredentials = new DefaultAzureCredential();
 var keyVaultEndpoint = builder.Configuration["AzureKeyVaultEndpoint"];
 
@@ -22,28 +21,24 @@ builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint), defaultCredent
         // Manager = new PrefixKeyVaultSecretManager(secretPrefix),
         ReloadInterval = TimeSpan.FromMinutes(5)
     });
-
 */
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-
-// DB Config
 builder.Services.AddDbContext<SOSDbContext>(options =>
 {
     var serverVersion = new MySqlServerVersion(new Version(8, 0, 28));
     options.UseMySql(builder.Configuration.GetConnectionString("SOSdb"), serverVersion, options => options.EnableRetryOnFailure());
 });
 
-builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<ISOSRequestService, SOSRequestService>();
+builder.Services.AddTransient<ISOSRequestRepository, SOSRequestRepository>();
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
