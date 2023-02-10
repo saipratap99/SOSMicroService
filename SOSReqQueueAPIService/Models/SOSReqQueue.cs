@@ -25,10 +25,6 @@ namespace SOSReqQueueAPIService.Models
         public int PoliceId { get; set; }
         public User Police { get; set; } = null!;
 
-        [Required]
-        [ForeignKey("StatusId")]
-        public int StatusId { get; set; }
-        public Status Status { get; set; } = null!;
 
     }
 }

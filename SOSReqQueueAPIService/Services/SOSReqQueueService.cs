@@ -18,6 +18,22 @@ namespace SOSReqQueueAPIService.Services
             this._sOSReqQueueRepository = sOSReqQueueRepository;
         }
 
+        public async Task<List<User>> AvailablePolice(string city)
+        {
+            try
+            {
+                this._logger.LogInformation($"Enter Services.SOSReqQueueService.AvailablePolice, City: {city}");
+                var availablePolice = await this._sOSReqQueueRepository.AvailablePolice(city);
+                this._logger.LogInformation($"Exit Services.SOSReqQueueService.AvailablePolice, Available Police {availablePolice}");
+                return availablePolice;
+            }
+            catch (Exception e)
+            {
+                this._logger.LogError($"Error: Services.SOSReqQueueService.AvailablePolice, Error: {e.Message}");
+                throw;
+            }
+        }
+
         public async Task<string> Create(SOSReqQueue sOSReqQueue)
         {
             try

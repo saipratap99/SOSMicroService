@@ -23,6 +23,9 @@ namespace SOSReqQueueAPIService.Models
             modelBuilder.Entity<Status>().ToTable(nameof(Statuses), t => t.ExcludeFromMigrations());
             modelBuilder.Entity<SOSRequest>().ToTable(nameof(SOSRequests), t => t.ExcludeFromMigrations());
             modelBuilder.Entity<FIR>().ToTable(nameof(FIRs), t => t.ExcludeFromMigrations());
+            modelBuilder.Entity<SOSReqQueue>().HasOne(o => o.Police).WithOne(e => e.policeSOSReqQueue);
+            
+            
         }
 
         public override int SaveChanges()

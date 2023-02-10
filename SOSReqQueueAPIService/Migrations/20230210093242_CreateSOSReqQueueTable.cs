@@ -19,9 +19,9 @@ namespace SOSReqQueueAPIService.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    SOSRequestId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     PoliceId = table.Column<int>(type: "int", nullable: false),
-                    StatusId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
@@ -29,16 +29,17 @@ namespace SOSReqQueueAPIService.Migrations
                 {
                     table.PrimaryKey("PK_SOSReqQueue", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SOSReqQueue_Statuses_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "Statuses",
+                        name: "FK_SOSReqQueue_SOSRequests_SOSRequestId",
+                        column: x => x.SOSRequestId,
+                        principalTable: "SOSRequests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_SOSReqQueue_Users_PoliceId",
                         column: x => x.PoliceId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_SOSReqQueue_Users_UserId",
                         column: x => x.UserId,
@@ -51,12 +52,13 @@ namespace SOSReqQueueAPIService.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_SOSReqQueue_PoliceId",
                 table: "SOSReqQueue",
-                column: "PoliceId");
+                column: "PoliceId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_SOSReqQueue_StatusId",
+                name: "IX_SOSReqQueue_SOSRequestId",
                 table: "SOSReqQueue",
-                column: "StatusId");
+                column: "SOSRequestId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SOSReqQueue_UserId",

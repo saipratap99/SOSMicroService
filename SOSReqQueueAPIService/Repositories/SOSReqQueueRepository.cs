@@ -15,6 +15,29 @@ namespace SOSReqQueueAPIService.Repositories
             this._logger = logger;
         }
 
+        public async Task<List<User>> AvailablePolice(string city)
+        {
+            try
+            {
+                this._logger.LogInformation($"Enter: Repositories.SOSReqQueueRepository.Get.");
+                var avalablePolice = await (from user in this._context.Users
+                       where user.City == city && user.policeSOSReqQueue == null && user.Role == Roles.POLICE
+                       select user
+                ).ToListAsync<User>();
+
+
+                this._logger.LogInformation($"Exit: Repositories.SOSReqQueueRepository.Get, SOS Request Queue: {null}");
+                return avalablePolice;
+
+            }
+            catch (Exception e)
+            {
+                this._logger.LogError($"Error: Repositories.SOSReqQueueRepository.Get, Error: {e.Message}");
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
         public async Task<string> Create(SOSReqQueue sOSReqQueue)
         {
             try
@@ -38,19 +61,13 @@ namespace SOSReqQueueAPIService.Repositories
             try
             {
                 this._logger.LogInformation($"Enter: Repositories.SOSReqQueueRepository.Delete. id ${id}");
-                var sOSReqQueue = await this._context.SOSReqQueue.Include(u => u.Status)
-                                                        .Include(u => u.User)
-                                                        .Include(u => u.Police)
-                                                        .Include(u => u.SOSRequest)
-                                                           .ThenInclude(u => u.Priority)
-                                                        .FirstOrDefaultAsync(sos => sos.Id == id);
+                var sOSReqQueue = await this._context.SOSReqQueue.FirstOrDefaultAsync(sos => sos.Id == id);
                 if (sOSReqQueue == null)
                     throw new BusinessException($"{ResponseConstants.SOS_Request_Queue_NOT_FOUND} id: {id}");
                 this._context.SOSReqQueue.Remove(sOSReqQueue);
                 await this._context.SaveChangesAsync();
                 this._logger.LogInformation($"Exit: Repositories.SOSReqQueueRepository.Delete");
                 return ResponseConstants.DELETED_SUCCESSFULLY;
-
             }
             catch (Exception e)
             {
@@ -88,7 +105,7 @@ namespace SOSReqQueueAPIService.Repositories
             try
             {
                 this._logger.LogInformation($"Enter: Repositories.SOSReqQueueRepository.Get, Id: {id}");
-                var sOSReqQueue = await this._context.SOSReqQueue.Include(u => u.Status)
+                var sOSReqQueue = await this._context.SOSReqQueue
                                                          .Include(u => u.User)
                                                          .Include(u => u.Police)
                                                          .Include(u => u.SOSRequest)

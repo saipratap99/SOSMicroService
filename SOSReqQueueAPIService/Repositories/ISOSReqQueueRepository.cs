@@ -9,6 +9,7 @@ namespace SOSReqQueueAPIService.Repositories
         public Task<SOSReqQueue> Get(int id);
         public Task<string> Delete(int id);
         public Task<string> Update(int id, SOSReqQueue sOSReqQueue);
+        public Task<List<User>> AvailablePolice(string city);
     }
 }
 

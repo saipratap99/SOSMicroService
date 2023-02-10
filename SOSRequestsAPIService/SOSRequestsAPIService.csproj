@@ -19,6 +19,7 @@
     </PackageReference>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.3" />
   </ItemGroup>
 
 
@@ -33,6 +34,7 @@
     <None Remove="Utils\" />
     <None Remove="Constants\" />
     <None Remove="Exceptions\" />
+    <None Remove="AWSSDK.Extensions.NETCore.Setup" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />

@@ -25,6 +25,8 @@ namespace FIRAPIService.Models
 
         public string City { get; set; }
 
+        [MaxLength(10)]
+        public string? Role { get; set; }
         [Required]
         [MinLength(6)]
         [MaxLength(6)]

@@ -11,7 +11,7 @@ using SOSReqQueueAPIService.Models;
 namespace SOSReqQueueAPIService.Migrations
 {
     [DbContext(typeof(SOSDbContext))]
-    [Migration("20230206070709_CreateSOSReqQueueTable")]
+    [Migration("20230210093242_CreateSOSReqQueueTable")]
     partial class CreateSOSReqQueueTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -85,10 +85,10 @@ namespace SOSReqQueueAPIService.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("PoliceId")
+                    b.Property<int>("PoliceId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StatusId")
+                    b.Property<int>("SOSRequestId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -99,9 +99,10 @@ namespace SOSReqQueueAPIService.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PoliceId");
+                    b.HasIndex("PoliceId")
+                        .IsUnique();
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex("SOSRequestId");
 
                     b.HasIndex("UserId");
 
@@ -128,7 +129,7 @@ namespace SOSReqQueueAPIService.Migrations
                         .HasMaxLength(6)
                         .HasColumnType("varchar(6)");
 
-                    b.Property<int?>("PoliceId")
+                    b.Property<int>("PoliceId")
                         .HasColumnType("int");
 
                     b.Property<int>("PriorityId")
@@ -192,6 +193,10 @@ namespace SOSReqQueueAPIService.Migrations
                         .HasMaxLength(6)
                         .HasColumnType("varchar(6)");
 
+                    b.Property<string>("Role")
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users", null, t => t.ExcludeFromMigrations());
@@ -219,12 +224,14 @@ namespace SOSReqQueueAPIService.Migrations
             modelBuilder.Entity("SOSReqQueueAPIService.Models.SOSReqQueue", b =>
                 {
                     b.HasOne("SOSReqQueueAPIService.Models.User", "Police")
-                        .WithMany()
-                        .HasForeignKey("PoliceId");
+                        .WithOne("policeSOSReqQueue")
+                        .HasForeignKey("SOSReqQueueAPIService.Models.SOSReqQueue", "PoliceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("SOSReqQueueAPIService.Models.Status", "Status")
+                    b.HasOne("SOSReqQueueAPIService.Models.SOSRequest", "SOSRequest")
                         .WithMany()
-                        .HasForeignKey("StatusId")
+                        .HasForeignKey("SOSRequestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -236,7 +243,7 @@ namespace SOSReqQueueAPIService.Migrations
 
                     b.Navigation("Police");
 
-                    b.Navigation("Status");
+                    b.Navigation("SOSRequest");
 
                     b.Navigation("User");
                 });
@@ -245,7 +252,9 @@ namespace SOSReqQueueAPIService.Migrations
                 {
                     b.HasOne("SOSReqQueueAPIService.Models.User", "Police")
                         .WithMany()
-                        .HasForeignKey("PoliceId");
+                        .HasForeignKey("PoliceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SOSReqQueueAPIService.Models.Priority", "Priority")
                         .WithMany()
@@ -272,6 +281,11 @@ namespace SOSReqQueueAPIService.Migrations
                     b.Navigation("Status");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SOSReqQueueAPIService.Models.User", b =>
+                {
+                    b.Navigation("policeSOSReqQueue");
                 });
 #pragma warning restore 612, 618
         }

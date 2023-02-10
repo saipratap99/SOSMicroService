@@ -89,9 +89,6 @@ namespace SOSReqQueueAPIService.Migrations
                     b.Property<int>("SOSRequestId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StatusId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
@@ -100,11 +97,10 @@ namespace SOSReqQueueAPIService.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PoliceId");
+                    b.HasIndex("PoliceId")
+                        .IsUnique();
 
                     b.HasIndex("SOSRequestId");
-
-                    b.HasIndex("StatusId");
 
                     b.HasIndex("UserId");
 
@@ -195,6 +191,10 @@ namespace SOSReqQueueAPIService.Migrations
                         .HasMaxLength(6)
                         .HasColumnType("varchar(6)");
 
+                    b.Property<string>("Role")
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users", null, t => t.ExcludeFromMigrations());
@@ -222,20 +222,14 @@ namespace SOSReqQueueAPIService.Migrations
             modelBuilder.Entity("SOSReqQueueAPIService.Models.SOSReqQueue", b =>
                 {
                     b.HasOne("SOSReqQueueAPIService.Models.User", "Police")
-                        .WithMany()
-                        .HasForeignKey("PoliceId")
+                        .WithOne("policeSOSReqQueue")
+                        .HasForeignKey("SOSReqQueueAPIService.Models.SOSReqQueue", "PoliceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SOSReqQueueAPIService.Models.SOSRequest", "SOSRequest")
                         .WithMany()
                         .HasForeignKey("SOSRequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SOSReqQueueAPIService.Models.Status", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -248,8 +242,6 @@ namespace SOSReqQueueAPIService.Migrations
                     b.Navigation("Police");
 
                     b.Navigation("SOSRequest");
-
-                    b.Navigation("Status");
 
                     b.Navigation("User");
                 });
@@ -287,6 +279,11 @@ namespace SOSReqQueueAPIService.Migrations
                     b.Navigation("Status");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SOSReqQueueAPIService.Models.User", b =>
+                {
+                    b.Navigation("policeSOSReqQueue");
                 });
 #pragma warning restore 612, 618
         }

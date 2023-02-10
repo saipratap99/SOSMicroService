@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace SOSReqQueueAPIService.Models
 {
@@ -25,10 +26,16 @@ namespace SOSReqQueueAPIService.Models
 
         public string City { get; set; }
 
+        [MaxLength(10)]
+        public string? Role { get; set; }
+
         [Required]
         [MinLength(6)]
         [MaxLength(6)]
         public string Pincode { get; set; }
+
+        [JsonIgnore]
+        public SOSReqQueue? policeSOSReqQueue { get; set; }
     }
 }
 

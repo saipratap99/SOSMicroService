@@ -96,6 +96,25 @@ namespace SOSReqQueueAPIService.Controllers
         }
 
 
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<ActionResult<object>> AvailablePolice(string city)
+        {
+            try
+            {
+                var response = await this._sOSReqQueueService.AvailablePolice(city);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+
+                if (e.GetType() == typeof(BusinessException))
+                    return BadRequest(e.Message);
+                else
+                    return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
     }
 }
 
