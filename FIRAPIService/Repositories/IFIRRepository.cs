@@ -10,6 +10,7 @@ namespace FIRAPIService.Repositories
         public Task<FIR> Get(int id);
         public Task<string> Delete(int id);
         public Task<string> Update(int id, FIR fir);
+        public Task<SOSRequest> GetSOSRequestDetailsOfFir(int firID);
     }
 }
 

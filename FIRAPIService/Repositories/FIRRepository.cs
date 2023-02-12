@@ -23,12 +23,33 @@ namespace FIRAPIService.Repositories
                 this._logger.LogInformation($"Enter: Repositories.FIRRepository.Create, FIR : {fir}");
                 this._context.Add(fir);
                 int result = await this._context.SaveChangesAsync();
+                this._context.Entry<FIR>(fir).GetDatabaseValues();
+                
                 this._logger.LogInformation($"Exit: Repositories.FIRRepository.Create");
                 return ResponseConstants.CREATED_SUCCESSFULLY;
             }
             catch (Exception e)
             {
                 this._logger.LogInformation($"Error: Repositories.FIRRepository.Create, Error: {e.Message}");
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task<SOSRequest> GetSOSRequestDetailsOfFir(int sosRequestId)
+        {
+            try
+            {
+                this._logger.LogInformation($"Enter: Repositories.FIRRepository.GetSOSRequestDetailsOfFir, FIR Id : {sosRequestId}");
+                var fir = await this._context.FIRs.Include(u => u.SOSRequest).FirstOrDefaultAsync<FIR>(fir => fir.SOSRequestId == sosRequestId);
+                if(fir == null)
+                    throw new BusinessException($"{ResponseConstants.FIR_NOT_FOUND} id: {sosRequestId}");
+                this._logger.LogInformation($"Exit: Repositories.FIRRepository.GetSOSRequestDetailsOfFir");
+                return fir.SOSRequest;
+            }
+            catch (Exception e)
+            {
+                this._logger.LogInformation($"Error: Repositories.FIRRepository.GetSOSRequestDetailsOfFir, Error: {e.Message}");
                 Console.WriteLine(e);
                 throw;
             }

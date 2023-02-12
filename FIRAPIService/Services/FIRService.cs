@@ -1,9 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using FIRAPIService.Constants;
 using FIRAPIService.Exceptions;
 using FIRAPIService.Models;
 using FIRAPIService.Repositories;
 using FIRAPIService.Utils;
+using RabbitMQMicroService.Constants;
+using RabbitMQMicroService.Models;
+using RabbitMQMicroService.Services;
 
 namespace FIRAPIService.Services
 {
@@ -11,11 +15,13 @@ namespace FIRAPIService.Services
 	{
         private readonly IFIRRepository _fIRRepository;
         private readonly ILogger<FIRService> _logger;
+        private IConfiguration _config;
 
-        public FIRService(IFIRRepository fIRRepository, ILogger<FIRService> logger)
+        public FIRService(IFIRRepository fIRRepository, ILogger<FIRService> logger, IConfiguration config)
         {
             this._logger = logger;
             this._fIRRepository = fIRRepository;
+            this._config = config;
         }
 
         public async Task<string> Create(FIR fIR)
@@ -29,10 +35,29 @@ namespace FIRAPIService.Services
                     string errorMessages = String.Join("\n", results.Select(o => o.ErrorMessage));
                     throw new BusinessException(errorMessages);
                 }
+
+                fIR.StatusId = 4;
                 this._logger.LogInformation($"Exit Services.FIRService.Create");
                 fIR.Id = 0;
 
                 string response = await this._fIRRepository.Create(fIR);
+                SOSRequest sOSRequest = await this._fIRRepository.GetSOSRequestDetailsOfFir(fIR.SOSRequestId);
+
+                // Publish to QUEUE
+                string exchangeName = this._config.GetValue<string>("RabbitMQConstants:exchangeName");
+                string routingKey = this._config.GetValue<string>("RabbitMQConstants:routingKey");
+                string queueName = this._config.GetValue<string>("RabbitMQConstants:queueName");
+                Console.WriteLine($"${exchangeName} - ${routingKey}");
+                RabbitMQService rabbitMQService = new RabbitMQService();
+                Message msg = new Message()
+                {
+                    operation = Operations.reqClosed,
+                    UserId = sOSRequest.UserId,
+                    SOSRequestId = (int)sOSRequest.Id,
+                    PoliceId = (int)sOSRequest.PoliceId,
+                };
+
+                rabbitMQService.PublishMessage(msg, exchangeName, routingKey, queueName);
                 return response;
             }
             catch (Exception e)

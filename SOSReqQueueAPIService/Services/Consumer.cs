@@ -15,19 +15,7 @@ namespace SOSReqQueueAPIService.Services
 {
     public static class Consumer
     {
-        /*
-        string UserName;
-        string Password;
-        string HostName;
-        private readonly ISOSReqQueueService _sOSReqQueueService;
-        public Consumer(ISOSReqQueueService sOSReqQueueService)
-        {
-            this._sOSReqQueueService = sOSReqQueueService;
-            UserName = "guest";
-            Password = "guest";
-            HostName = "localhost";
-        }
-        */
+       
         public async static Task<object> StartConsumer(string queueName, string connectionString)
         {
             try
@@ -36,7 +24,7 @@ namespace SOSReqQueueAPIService.Services
                 var optionsBuilder = new DbContextOptionsBuilder<SOSDbContext>();
                 optionsBuilder.UseMySql(connectionString, serverVersion, options => options.EnableRetryOnFailure());
                 var _context = new SOSDbContext(optionsBuilder.Options);
-                Console.WriteLine("Con Str", connectionString);
+                
                 string UserName;
                 string Password;
                 string HostName;
