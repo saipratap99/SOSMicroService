@@ -19,6 +19,31 @@ namespace SOSRequestsAPIService.Repositories
             this._logger = logger;
 		}
 
+        public async Task<SOSRequest> AssignPolice(int sOSRequestId, int policeId)
+        {
+            try
+            {
+                this._logger.LogInformation($"Enter: Repositories.SOSRequestRepository.AssignPolice, SOS Request Id: {sOSRequestId}");
+                var sosRequest = await this.Get(sOSRequestId);
+                sosRequest.PoliceId = policeId;
+                //if (sosRequest.PoliceId != null)
+                //{
+                    this._context.Update(sosRequest);
+                    await this._context.SaveChangesAsync();
+                //}
+                    
+
+                this._logger.LogInformation($"Exit: Repositories.SOSRequestRepository.AssignPolice");
+                return sosRequest;
+            }
+            catch (Exception e)
+            {
+                this._logger.LogError($"Error: Repositories.SOSRequestRepository.AssignPolice, Error: {e.Message}");
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
         public async Task<string> Create(SOSRequest sOSRequest)
         {
             try

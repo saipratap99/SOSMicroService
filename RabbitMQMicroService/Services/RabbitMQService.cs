@@ -13,29 +13,30 @@ namespace RabbitMQMicroService.Services
         string UserName;
         string Password;
         string HostName;
+        ConnectionFactory connectionFactory;
+        IConnection connection;
+        IModel model;
 
         public RabbitMQService()
 		{
             UserName = "guest";
             Password = "guest";
             HostName = "localhost";
+            //Main entry point to the RabbitMQ .NET AMQP client
+            connectionFactory = new RabbitMQ.Client.ConnectionFactory()
+            {
+                UserName = UserName,
+                Password = Password,
+                HostName = HostName
+            };
+            connection = connectionFactory.CreateConnection();
+            model = connection.CreateModel();
         }
 
         public void createDirectExchange(string exchangeName)
 		{
             try
             {
-
-                //Main entry point to the RabbitMQ .NET AMQP client
-                var connectionFactory = new RabbitMQ.Client.ConnectionFactory()
-                {
-                    UserName = UserName,
-                    Password = Password,
-                    HostName = HostName
-                };
-
-                var connection = connectionFactory.CreateConnection();
-                var model = connection.CreateModel();
                 Console.WriteLine("Creating Exchange");
                 // Create Exchange
                 model.ExchangeDeclare(exchangeName, ExchangeType.Direct);
@@ -51,17 +52,6 @@ namespace RabbitMQMicroService.Services
         {
             try
             {
-                //Main entry point to the RabbitMQ .NET AMQP client
-                var connectionFactory = new RabbitMQ.Client.ConnectionFactory()
-                {
-                    UserName = UserName,
-                    Password = Password,
-                    HostName = HostName
-                };
-
-                var connection = connectionFactory.CreateConnection();
-                var model = connection.CreateModel();
-
                 // Create Queue
                 model.QueueDeclare(queueName, true, false, false, null);
                 Console.WriteLine("Creating Queue");
@@ -77,21 +67,9 @@ namespace RabbitMQMicroService.Services
         {
             try
             {
-                //Main entry point to the RabbitMQ .NET AMQP client
-                var connectionFactory = new RabbitMQ.Client.ConnectionFactory()
-                {
-                    UserName = UserName,
-                    Password = Password,
-                    HostName = HostName
-                };
-
-                var connection = connectionFactory.CreateConnection();
-                var model = connection.CreateModel();
-
                 // Bind Queue to Exchange
                 model.QueueBind(queueName, exchange, routingKey);
                 Console.WriteLine("Creating Binding");
-                Console.ReadLine();
             }
             catch(Exception err)
             {
@@ -100,26 +78,25 @@ namespace RabbitMQMicroService.Services
             }
         }
 
-        public void PublishMessage(Message message, string exchangeName, string routingKey)
+        public void PublishMessage(Message message, string exchangeName, string routingKey, string queueName)
         {
             try
             {
-                // Main entry point to the RabbitMQ.NET AMQP client
-                var connectionFactory = new RabbitMQ.Client.ConnectionFactory()
-                {
-                    UserName = UserName,
-                    Password = Password,
-                    HostName = HostName
-                };
-                var connection = connectionFactory.CreateConnection();
-                var model = connection.CreateModel();
+                
                 var properties = model.CreateBasicProperties();
+                
+                this.createDirectExchange(exchangeName);
+                this.QueueDeclare(queueName);
+                this.QueueBind(queueName, exchangeName, routingKey);
+                
                 properties.Persistent = false;
+
                 var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
+                Console.WriteLine(JsonConvert.SerializeObject(message));
                 Console.WriteLine("Body");
                 model.BasicPublish(exchange: exchangeName, routingKey: routingKey, basicProperties: properties, body: body);
                 Console.WriteLine("Message Sent");
-                Console.ReadLine();
+                return;
             }
             catch(Exception err)
             {
@@ -128,7 +105,7 @@ namespace RabbitMQMicroService.Services
             }
         }
 
-        public void StartConsumer(string queueName)
+        public void StartConsumer(string queueName, Func<object, object> executeFunction)
         {
             try
             {
@@ -150,8 +127,8 @@ namespace RabbitMQMicroService.Services
                     var message = JsonConvert.DeserializeObject<Message>(messageJSON);
                     if (message != null)
                     {
-                        //Me.Products.Add(product);
-                        Console.WriteLine(" [x] Received {0}", message.SOSRequestId);
+                        executeFunction(message);
+                        Console.WriteLine($" [x] Received {0} ${message.SOSRequestId} ${message.operation}");
                     }
 
                 };

@@ -75,6 +75,26 @@ namespace SOSRequestsAPIService.Controllers
                     return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
+
+        [HttpPut]
+        [Route("[Action]")]
+        public async Task<ActionResult<object>> AssignPolice(int sOSRequestId, int policeId)
+        {
+            try
+            {
+                var response = await this._sOSRequestService.AssignPolice(sOSRequestId, policeId);
+                Console.WriteLine("Resp", response);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+
+                if (e.GetType() == typeof(BusinessException))
+                    return BadRequest(e.Message);
+                else
+                    return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
     }
 }
 

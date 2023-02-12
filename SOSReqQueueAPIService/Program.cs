@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SOSReqQueueAPIService.Models;
 using SOSReqQueueAPIService.Services;
 using SOSReqQueueAPIService.Repositories;
+using RabbitMQMicroService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,10 +38,14 @@ builder.Services.AddDbContext<SOSDbContext>(options =>
 });
 
 
-
 builder.Services.AddTransient<ISOSReqQueueRepository, SOSReqQueueRepository>();
 builder.Services.AddTransient<ISOSReqQueueService, SOSReqQueueService>();
+
+string connectionString = builder.Configuration["ConnectionStrings:SOSdb"];
 var app = builder.Build();
+
+string queueName = "sqsqueue";
+await Consumer.StartConsumer(queueName, connectionString);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

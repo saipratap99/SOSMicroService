@@ -10,6 +10,7 @@ namespace SOSRequestsAPIService.Repositories
         public Task<SOSRequest> Get(int id);
         public Task<string> Delete(int id);
         public Task<string> Update(int id, SOSRequest sOSRequest);
+        public Task<SOSRequest> AssignPolice(int sOSRequestId, int policeId);
     }
 }
 

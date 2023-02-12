@@ -6,7 +6,7 @@ using RabbitMQMicroService.Constants;
 Console.WriteLine("Hello, World!");
 
 
-RabbitMQService rabbitMQService = new RabbitMQService();
+//RabbitMQService rabbitMQService = new RabbitMQService();
 
 // Create SOS Exchange
 string exchangeName = "SOSExchange";
@@ -28,6 +28,6 @@ Message msg = new Message()
     operation = Operations.assignPolice
 };
 
-rabbitMQService.StartConsumer(queueName);
-rabbitMQService.PublishMessage(msg, exchangeName, routingKey);
+//rabbitMQService.StartConsumer(queueName);
+//rabbitMQService.PublishMessage(msg, exchangeName, routingKey);
 

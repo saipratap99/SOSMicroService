@@ -1,9 +1,11 @@
 ﻿using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Microsoft.EntityFrameworkCore;
+using RabbitMQMicroService.Services;
 using SOSRequestsAPIService.Models;
 using SOSRequestsAPIService.Repositories;
 using SOSRequestsAPIService.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +36,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Rabbit MQ Config
+
 
 var app = builder.Build();
 

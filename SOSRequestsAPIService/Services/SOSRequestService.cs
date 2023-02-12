@@ -5,6 +5,11 @@ using SOSRequestsAPIService.Repositories;
 using SOSRequestsAPIService.Exceptions;
 using SOSRequestsAPIService.Services;
 using SOSRequestsAPIService.Utils;
+using SOSRequestsAPIService.Constants;
+
+using RabbitMQMicroService.Services;
+using RabbitMQMicroService.Models;
+using RabbitMQMicroService.Constants;
 
 namespace SOSRequestsAPIService.Services
 {
@@ -12,11 +17,38 @@ namespace SOSRequestsAPIService.Services
 	{
         private readonly ISOSRequestRepository _sOSRequestRepository;
         private readonly ILogger<SOSRequestService> _logger;
+        private IConfiguration _config;
 
-        public SOSRequestService(ISOSRequestRepository sOSRequestRepository, ILogger<SOSRequestService> logger)
+        public SOSRequestService(ISOSRequestRepository sOSRequestRepository, ILogger<SOSRequestService> logger, IConfiguration config)
         {
             this._logger = logger;
             this._sOSRequestRepository = sOSRequestRepository;
+            this._config = config;
+        }
+
+        public async Task<string> AssignPolice(int sOSRequestId, int policeId)
+        {
+            try
+            {
+                this._logger.LogInformation($"Enter Services.SOSRequestsAPIService.AssignPolice. SOS Request id ${sOSRequestId}");
+                SOSRequest sOSRequest = await this._sOSRequestRepository.AssignPolice(sOSRequestId, policeId);
+                this._logger.LogInformation($"Exit Services.SOSRequestsAPIService.AssignPolice, SOS Request {sOSRequest}");
+
+                // Publish to QUEUE
+                string exchangeName = this._config.GetValue<string>("RabbitMQConstants:exchangeName");
+                string routingKey = this._config.GetValue<string>("RabbitMQConstants:routingKey");
+                string queueName = this._config.GetValue<string>("RabbitMQConstants:queueName");
+                Console.WriteLine($"${exchangeName} - ${routingKey}");
+                RabbitMQService rabbitMQService = new RabbitMQService();
+                Message message = new Message() { PoliceId = policeId, SOSRequestId = sOSRequestId, UserId = sOSRequest.UserId, operation = Operations.assignPolice };
+                rabbitMQService.PublishMessage(message, exchangeName, routingKey, queueName);
+                return ResponseConstants.POLICE_ASSIGNED;
+            }
+            catch (Exception e)
+            {
+                this._logger.LogError($"Error: Services.SOSRequestsAPIService.AssignPolice, Error: {e.Message}");
+                throw;
+            }
         }
 
         public async Task<string> Create(SOSRequest sOSRequest)

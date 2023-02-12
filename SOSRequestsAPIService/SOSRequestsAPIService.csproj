@@ -45,4 +45,9 @@
     <Folder Include="Constants\" />
     <Folder Include="Exceptions\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RabbitMQMicroService\RabbitMQMicroService.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

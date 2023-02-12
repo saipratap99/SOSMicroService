@@ -7,6 +7,7 @@ namespace SOSRequestsAPIService.Constants
         public static string UPDATED_SUCCESSFULLY = "UPDATED SUCCESSFULLY.";
 		public static string USER_NOT_FOUND = "USER NOT FOUND.";
 		public static string SOSRequest_NOT_FOUND = "SOS Request Not found.";
+        public static string POLICE_ASSIGNED = "Police Assigned.";
 
     }
 }
