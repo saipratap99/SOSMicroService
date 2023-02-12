@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRAPIService", "FIRAPIServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOSReqQueueAPIService", "SOSReqQueueAPIService\SOSReqQueueAPIService.csproj", "{DADBB79D-DFBD-466D-8E11-54A9760D7CC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQMicroService", "RabbitMQMicroService\RabbitMQMicroService.csproj", "{C3021284-B098-4828-88E0-28497B1C37CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{DADBB79D-DFBD-466D-8E11-54A9760D7CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DADBB79D-DFBD-466D-8E11-54A9760D7CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DADBB79D-DFBD-466D-8E11-54A9760D7CC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3021284-B098-4828-88E0-28497B1C37CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3021284-B098-4828-88E0-28497B1C37CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3021284-B098-4828-88E0-28497B1C37CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3021284-B098-4828-88E0-28497B1C37CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
