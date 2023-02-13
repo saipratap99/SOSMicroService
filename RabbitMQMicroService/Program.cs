@@ -29,5 +29,5 @@ Message msg = new Message()
 };
 
 //rabbitMQService.StartConsumer(queueName);
-//rabbitMQService.PublishMessage(msg, exchangeName, routingKey);
+//rabbitMQService.PublishMessage(msg, exchangeName, routingKey, queueName);
 

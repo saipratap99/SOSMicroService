@@ -11,6 +11,7 @@ namespace SOSRequestsAPIService.Services
         public Task<string> Delete(int id);
         public Task<string> Update(int id, SOSRequest sOSRequest);
         public Task<string> AssignPolice(int sOSRequestId, int policeId);
+        public Task<List<SOSRequest>> UnAssignedRequests();
 
     }
 }

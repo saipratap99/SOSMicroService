@@ -103,6 +103,23 @@ namespace SOSRequestsAPIService.Repositories
             }
         }
 
+        public async Task<List<SOSRequest>> UnAssignedRequests()
+        {
+            try
+            {
+                this._logger.LogInformation($"Enter: Repositories.SOSRequestRepository.UnAssignedRequests.");
+                List<SOSRequest> sOSRequests = await this._context.SOSRequests.Where(s => s.PoliceId == null).ToListAsync<SOSRequest>();
+                this._logger.LogInformation($"Exit: Repositories.SOSRequestRepository.UnAssignedRequests, SOS Requests {sOSRequests}");
+                return sOSRequests;
+            }
+            catch (Exception e)
+            {
+                this._logger.LogError($"Error: Repositories.SOSRequestRepository.UnAssignedRequests, Error: {e.Message}");
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
         public Task<string> Update(int id, SOSRequest sOSRequest)
         {
             throw new NotImplementedException();

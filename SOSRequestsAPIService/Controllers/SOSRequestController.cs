@@ -40,6 +40,27 @@ namespace SOSRequestsAPIService.Controllers
 
         }
 
+        [HttpGet]
+        [Route("[Action]")]
+        public async Task<ActionResult<object>> UnAssignedRequests()
+        {
+            try
+            {
+                var response = await this._sOSRequestService.UnAssignedRequests();
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+
+                if (e.GetType() == typeof(BusinessException))
+                    return BadRequest(e.Message);
+                else
+                    return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+
+        }
+
+
         [HttpGet("{id}")]
         public async Task<ActionResult<object>> Get(int id)
         {

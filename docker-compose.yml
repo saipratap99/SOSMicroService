@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  firapiservice:
+    image: ${DOCKER_REGISTRY-}firapiservice
+    build:
+      context: .
+      dockerfile: FIRAPIService/Dockerfile
+
+  sosreqqueueapiservice:
+    image: ${DOCKER_REGISTRY-}sosreqqueueapiservice
+    build:
+      context: .
+      dockerfile: SOSReqQueueAPIService/Dockerfile
+
+
+  sosrequestsapiservice:
+    image: ${DOCKER_REGISTRY-}sosrequestsapiservice
+    build:
+      context: .
+      dockerfile: SOSRequestsAPIService/Dockerfile
+
+
+  usersapiservice:
+    image: ${DOCKER_REGISTRY-}usersapiservice
+    build:
+      context: .
+      dockerfile: UsersAPIService/Dockerfile
+

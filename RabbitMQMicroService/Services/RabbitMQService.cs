@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Channels;
 using Newtonsoft.Json;
@@ -13,21 +14,30 @@ namespace RabbitMQMicroService.Services
         string UserName;
         string Password;
         string HostName;
+        int Port;
         ConnectionFactory connectionFactory;
         IConnection connection;
         IModel model;
 
         public RabbitMQService()
 		{
-            UserName = "guest";
-            Password = "guest";
-            HostName = "localhost";
+            UserName = "RabbitMQPratap";
+            Password = "RabbitMQPratap1012";
+            Port = 5671;
+            HostName = "b-ebbdd5f0-3ed6-4339-ba33-845043c615f7.mq.us-east-1.amazonaws.com";
+            
             //Main entry point to the RabbitMQ .NET AMQP client
             connectionFactory = new RabbitMQ.Client.ConnectionFactory()
             {
                 UserName = UserName,
                 Password = Password,
-                HostName = HostName
+                HostName = HostName,
+                Port = Port,
+                Ssl = {
+                    Enabled = true,
+                    ServerName = HostName
+                }
+
             };
             connection = connectionFactory.CreateConnection();
             model = connection.CreateModel();

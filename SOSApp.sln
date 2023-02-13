@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOSReqQueueAPIService", "SO
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQMicroService", "RabbitMQMicroService\RabbitMQMicroService.csproj", "{C3021284-B098-4828-88E0-28497B1C37CF}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{FE8B751B-1691-416B-9DB5-2EF4D3F90858}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{C3021284-B098-4828-88E0-28497B1C37CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3021284-B098-4828-88E0-28497B1C37CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3021284-B098-4828-88E0-28497B1C37CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE8B751B-1691-416B-9DB5-2EF4D3F90858}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE8B751B-1691-416B-9DB5-2EF4D3F90858}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE8B751B-1691-416B-9DB5-2EF4D3F90858}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE8B751B-1691-416B-9DB5-2EF4D3F90858}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
